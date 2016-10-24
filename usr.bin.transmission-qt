@@ -1,0 +1,47 @@
+# vim:syntax=apparmor
+
+#include <tunables/global>
+
+/usr/bin/transmission-qt {
+  #include <abstractions/nameservice>
+  #include <abstractions/openssl>
+  #include <abstractions/ssl_certs>
+  #include <abstractions/kde>
+  #include <abstractions/ubuntu-helpers>
+  #include <abstractions/ubuntu-bittorrent-clients>
+  #include <abstractions/dbus-session>
+
+  # Not needed for now, but maybe later.
+  #include <abstractions/private-files-strict>
+  # Where to save all downloads, torrents, etc. 
+  owner @{HOME}/Downloads/torrents/** rw,
+  owner @{HOME}/.config/kdeglobals r,
+  owner @{HOME}/.cache/icon-cache.kcache rw,
+  owner @{HOME}/.cache/transmission/** rw,
+  owner @{HOME}/.config/breezerc r,
+  # Settings, resume, etc.
+  owner @{HOME}/.config/transmission/** rw,
+  owner @{HOME}/.config/transmissionrc rw,
+
+  # KDE.
+  /usr/share/color-schemes/* r,
+  /usr/share/plasma/look-and-feel/** r,
+  /usr/share/qt5/translations/* r,
+
+  /etc/udev/udev.conf r,
+  /run/udev/data/+pci:* r,
+
+  /sys/devices/pci[0-9:]*/**/uevent r,
+
+  @{PROC}/sys/kernel/random/uuid r,
+  @{PROC}/@{pid}/mounts r,
+
+  /dev/tty r,
+
+  unix (connect, receive, send)
+       type=stream
+       peer=(addr="@/tmp/.ICE-unix/[0-9]*"),
+  unix (connect, receive, send)
+       type=stream
+       peer=(addr="@/tmp/dbus-[a-zA-Z0-9]*"),
+}
