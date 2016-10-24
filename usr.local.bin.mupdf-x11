@@ -1,0 +1,16 @@
+# Last Modified: Thu Jun 16 00:15:44 2016
+# vim:syntax=apparmor
+
+#include <tunables/global>
+
+/usr/local/bin/mupdf-x11 {
+  #include <abstractions/base>
+  #include <abstractions/freedesktop.org>
+  #include <abstractions/user-tmp>
+  #include <abstractions/X>
+  #include <abstractions/private-files-strict>
+
+  @{HOME}/.mupdf_bookmarks rw,
+  @{HOME}/** r,
+
+}
