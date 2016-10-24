@@ -1,0 +1,73 @@
+# Last Modified: Sun Oct 23 07:19:43 2016
+# vim:syntax=apparmor
+#include <tunables/global>
+
+/usr/bin/amarok {
+  #include <abstractions/audio>
+  #include <abstractions/gstreamer>
+  #include <abstractions/base>
+  #include <abstractions/dbus-session>
+  #include <abstractions/dbus>
+  #include <abstractions/kde>
+  #include <abstractions/nameservice>
+  #include <abstractions/private-files-strict>
+  #include <abstractions/user-tmp>
+  #include <abstractions/dconf>
+
+  owner @{HOME}/ r,
+  owner @{HOME}/**/ r,
+  owner @{HOME}/**.{3gp,aiff,aif,m3u8,amr,m4a,mp3,ogg,flac,wav,xspf} r,
+  owner @{HOME}/.kde/share/apps/amarok/** rw,
+  owner @{HOME}/.kde/share/config/* rw,
+  owner @{HOME}/.cache/gstreamer-1.0/* rw,
+  owner @{HOME}/.config/kde.org/libphonon.conf r,
+  owner @{HOME}/.local/share/user-places.xbel r,
+
+  # kde
+  /usr/share/kde4/config/** r,
+  /usr/share/kde4/apps/amarok/** r,
+  /usr/share/kde4/apps/desktoptheme/** r,
+  /usr/share/kde4/apps/kdeui/** r,
+  /usr/share/kde4/services/amarok* r,
+  /usr/share/kde4/servicetypes/amarok* r,
+  /usr/share/kubuntu-default-settings/kde4-profile/default/share/config/** r,
+
+  /usr/share/locale/ r,
+  /usr/share/locale-langpack/ r,
+
+  /usr/share/mysql/charsets/Index.xml r,
+
+  /usr/share/glib-*/schemas/ r,
+  /usr/share/glib-*/schemas/** r,
+
+  /run/udev/data/* r,
+  /etc/udev/udev.conf r,
+  /etc/fstab r,
+
+  @{PROC}/@{pid}/mounts r,
+
+  # abstractions/dconf doesn't have write.
+  owner /run/user/*/dconf/user w,
+
+  owner /{run,dev}/shm/pulse-shm* rwk,
+  owner /run/user/[0-9]*/ksocket-*/amarok*.slave-socket rw,
+
+  /usr/bin/ffmpeg Cx,
+  /usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner Cx -> gst_plugin_scanner,
+
+    unix (send, receive) type=stream peer=(label=/usr/bin/amarok///usr/bin/ffmpeg),
+
+  profile /usr/bin/ffmpeg {
+    #include <abstractions/base>
+
+    /usr/bin/ffmpeg r,
+
+  }
+
+  profile gst_plugin_scanner {
+    #include <abstractions/base>
+
+    /usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner r,
+
+  }
+}
