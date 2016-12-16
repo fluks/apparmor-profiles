@@ -1,0 +1,37 @@
+# Last Modified: Fri Dec 16 16:03:13 2016
+# vim: ft=apparmor
+#include <tunables/global>
+
+/usr/bin/audacious {
+  #include <abstractions/audio>
+  #include <abstractions/base>
+  #include <abstractions/fonts>
+  #include <abstractions/gnome>
+  #include <abstractions/nameservice>
+  # Not needed, but in case of accidentally allowing too much.
+  #include <abstractions/private-files-strict>
+  # TODO dbus abstraction.
+
+  @{HOME}/.config/audacious/ r,
+  @{HOME}/.config/audacious/** rwk,
+  @{HOME}/.config/gtk-3.0/* r,
+  @{HOME}/.config/gtkrc-2.0 r,
+  @{HOME}/.config/user-dirs.dirs r,
+  @{HOME}/.local/share/icons/** r,
+  @{HOME}/.local/share/mime/* r,
+  @{HOME}/.local/share/recently-used.xbel r,
+  @{HOME}/Music/ r,
+  @{HOME}/Music/** r,
+
+  owner /tmp/xauth-* r,
+
+  owner @{PROC}/@{pid}/cmdline r,
+  owner @{PROC}/@{pid}/mountinfo r,
+
+  /etc/kubuntu-default-settings/hidden-media r,
+  /etc/machine-id r,
+
+  /usr/share/audacious/** r,
+
+  /usr/bin/audacious mr,
+}
