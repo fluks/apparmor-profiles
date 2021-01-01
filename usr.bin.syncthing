@@ -1,0 +1,24 @@
+# Last Modified: Wed Jun 24 13:17:04 2020
+#include <tunables/global>
+
+/usr/bin/syncthing {
+  #include <abstractions/base>
+  #include <abstractions/nameservice>
+
+  /usr/bin/syncthing mrix,
+
+  /etc/ssl/certs/java/ r,
+
+  /proc/meminfo r,
+  /proc/sys/net/core/somaxconn r,
+
+  /sys/devices/system/cpu/online r,
+  /sys/kernel/mm/transparent_hugepage/hpage_pmd_size r,
+
+  owner @{HOME}/.config/syncthing r,
+  owner @{HOME}/.config/syncthing/** rwk,
+
+  owner @{HOME}/syncthing r,
+  owner @{HOME}/syncthing/** rw,
+
+}
