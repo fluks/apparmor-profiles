@@ -1,0 +1,72 @@
+# Last Modified: Fri Jul 26 18:38:37 2019
+# vim: ft=apparmor
+#include <tunables/global>
+
+/usr/bin/vlc {
+  #include <abstractions/audio>
+  #include <abstractions/base>
+  #include <abstractions/dbus-session-strict>
+  #include <abstractions/lightdm>
+  #include <abstractions/private-files-strict>
+  #include <abstractions/X>
+
+  deny owner /home/*/ r,
+
+  /lib/x86_64-linux-gnu/ld-*.so mr,
+  /proc/sys/kernel/core_pattern r,
+  /proc/sys/kernel/random/boot_id r,
+  /usr/share/alsa/alsa.conf.d/50-pulseaudio.conf r,
+  /usr/share/kservices5/audiocd.protocol r,
+  /usr/share/mime/audio/ r,
+
+  owner @{HOME}/.ICEauthority r,
+  owner @{HOME}/.Xauthority r,
+
+  owner @{HOME}/.cache/ksycoca5* r,
+  owner @{HOME}/.cache/qt_compose_cache_* r,
+  owner @{HOME}/.cache/icon-cache.kcache rw,
+  owner @{HOME}/.cache/mesa_shader_cache/** r,
+  owner @{HOME}/.cache/mesa_shader_cache/index rw,
+  owner @{HOME}/.cache/vlc/** rw,
+
+  owner @{HOME}/.config/QtProject.conf rw,
+  owner @{HOME}/.config/QtProject.conf.lock rwk,
+  owner @{HOME}/.config/baloofilerc r,
+  owner @{HOME}/.config/breezerc r,
+  owner @{HOME}/.config/dolphinrc r,
+  owner @{HOME}/.config/fontconfig/fonts.conf r,
+  owner @{HOME}/.config/kdeglobals rw,
+  owner @{HOME}/.config/kdeglobals.lock rwk,
+  owner @{HOME}/.config/menus/ r,
+  owner @{HOME}/.config/menus/** r,
+  owner @{HOME}/.config/trashrc r,
+  owner @{HOME}/.config/user-dirs.dirs r,
+  owner @{HOME}/.config/vlc/* rwkl,
+  owner @{HOME}/.config/vlcrc r,
+  owner @{HOME}/.config/vlcrc.lock rwk,
+
+  owner @{HOME}/.local/share/RecentDocuments/ r,
+  owner @{HOME}/.local/share/RecentDocuments/* rwkl,
+  owner @{HOME}/.local/share/kservices5/ r,
+  owner @{HOME}/.local/share/kservices5/** r,
+  owner @{HOME}/.local/share/mime/ r,
+  owner @{HOME}/.local/share/mime/** r,
+  owner @{HOME}/.local/share/user-places.xbel r,
+  owner @{HOME}/.local/share/vlc/* rw,
+
+  owner @{HOME}/Videos/ r,
+  owner @{HOME}/Videos/** rw,
+  owner @{HOME}/Music/ r,
+  owner @{HOME}/Music/** rw,
+  owner @{HOME}/Downloads/ r,
+  owner @{HOME}/Downloads/** rw,
+  owner @{HOME}/syncthing/ r,
+  owner @{HOME}/syncthing/** rw,
+  owner /media/data/jukka/Videos r,
+  owner /media/data/jukka/Videos/** r,
+
+  owner /proc/*/mounts r,
+  owner /{,var/}run/** mrwlk,
+
+  #/usr/bin/pulseaudio rix,
+}
