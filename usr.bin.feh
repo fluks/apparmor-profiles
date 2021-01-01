@@ -1,0 +1,28 @@
+# Last Modified: Tue Jul 30 14:55:26 2019
+# vim: ft=apparmor
+#include <tunables/global>
+
+/usr/bin/feh {
+  #include <abstractions/base>
+  #include <abstractions/X>
+
+  # abstract/base allows all ptrace, why? Deny all.
+  deny ptrace,
+
+  /etc/X11/cursors/breeze_cursors.theme r,
+  /usr/share/icons/breeze_cursors/index.theme r,
+  /usr/share/yudit/fonts/yudit.ttf r,
+
+  /usr/share/feh/** r,
+
+  /lib/x86_64-linux-gnu/ld-*.so mr,
+  /{usr/,}lib{,32,64}/** mr,
+  /usr/bin/feh mr,
+
+  owner @{HOME}/Pictures/** r,
+  owner @{HOME}/Downloads/** r,
+  @{HOME}/syncthing/** r,
+
+  owner /tmp/xauth-1000-_0 r,
+
+}
