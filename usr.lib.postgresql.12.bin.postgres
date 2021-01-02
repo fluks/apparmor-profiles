@@ -1,0 +1,16 @@
+# Last Modified: Sun Dec 13 17:37:18 2020
+#include <tunables/global>
+
+/usr/lib/postgresql/[0-9]*/bin/postgres {
+  #include <abstractions/base>
+  #include <abstractions/nameservice>
+  #include <abstractions/ssl_keys>
+
+  /usr/lib/postgresql/[0-9]*/bin/postgres mr,
+  /usr/share/postgresql/** r,
+  owner /dev/shm/PostgreSQL.[0-9]* rw,
+  owner /etc/postgresql/** r,
+  owner /proc/*/oom_score_adj rw,
+  owner /{,var/}run/postgresql/** rw,
+  owner /var/lib/postgresql/** rwl,
+}
